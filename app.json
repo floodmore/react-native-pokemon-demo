@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.lflood.pokemon"
+      "bundleIdentifier": "com.lflood.pokemon",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -48,6 +51,12 @@
         "projectId": "8d9daf01-ba89-4db6-b56e-318f9988a097"
       }
     },
-    "owner": "lflood"
+    "owner": "lflood",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8d9daf01-ba89-4db6-b56e-318f9988a097"
+    }
   }
 }
