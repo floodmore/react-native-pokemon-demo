@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { Image } from 'expo-image';
+import * as Haptics from 'expo-haptics';
 import {
   ActivityIndicator,
   ScrollView,
@@ -9,12 +10,21 @@ import {
   View,
 } from 'react-native';
 
+import { useCaught } from '@/context/CaughtContext';
 import { Colors, TypeColors } from '@/constants/colors';
 import { usePokemon } from '@/hooks/usePokemon';
 
 export default function PokemonDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { data: pokemon, isLoading, isError } = usePokemon(id);
+  const { caught, catchPokemon } = useCaught();
+  const isCaught = pokemon ? caught.has(pokemon.name) : false;
+
+  function handleCatch() {
+    if (!pokemon || isCaught) return;
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    catchPokemon(pokemon.name);
+  }
 
   if (isLoading) {
     return (
@@ -61,8 +71,12 @@ export default function PokemonDetailScreen() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.catchButton}>
-          <Text style={styles.catchButtonText}>Catch Pokémon</Text>
+        <TouchableOpacity
+          style={[styles.catchButton, isCaught && styles.catchButtonCaught]}
+          onPress={handleCatch}
+          disabled={isCaught}
+        >
+          <Text style={styles.catchButtonText}>{isCaught ? 'Caught!' : 'Catch Pokémon'}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -170,6 +184,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
+  },
+  catchButtonCaught: {
+    backgroundColor: Colors.textMuted,
   },
   catchButtonText: {
     color: '#fff',
