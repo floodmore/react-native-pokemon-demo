@@ -1,10 +1,9 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Colors, TypeColors } from '@/constants/colors';
-import type { MockPokemon } from '@/constants/mockPokemon';
 
 type Props = {
-  pokemon: MockPokemon;
+  pokemon: { id: number; name: string; types: string[] };
   onPress: () => void;
 };
 
@@ -14,7 +13,7 @@ export function PokemonCard({ pokemon, onPress }: Props) {
       <Text style={styles.id}>#{String(pokemon.id).padStart(3, '0')}</Text>
       <Text style={styles.name}>{pokemon.name}</Text>
       <View style={styles.types}>
-        {pokemon.types.map((type) => (
+        {(pokemon.types ?? []).map((type) => (
           <View key={type} style={[styles.badge, { backgroundColor: TypeColors[type] }]}>
             <Text style={styles.badgeText}>{type}</Text>
           </View>
